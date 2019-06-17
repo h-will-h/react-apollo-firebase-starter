@@ -1,10 +1,9 @@
 import * as functions from "firebase-functions";
-import * as express from "express";
 import * as admin from "firebase-admin";
 import { ApolloServer } from "apollo-server-express";
-
 import schema from "./graphql/schema";
 import resolvers from "./graphql/resolvers";
+const express = require("express");
 
 const getUidFromToken = (token: any) => {
   if (!token) {
@@ -17,7 +16,7 @@ const getUidFromToken = (token: any) => {
       return decodedToken.uid;
     })
     .catch(function(err: any) {
-      // Handle error
+      return "Auth Error";
     });
 };
 
@@ -36,7 +35,6 @@ const gqlServer = () => {
     },
     typeDefs: schema,
     resolvers,
-    // Enable graphiql gui
     introspection: true,
     playground: true
   });
