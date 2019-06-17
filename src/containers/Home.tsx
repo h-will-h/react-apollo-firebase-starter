@@ -1,4 +1,5 @@
 import React, { BaseSyntheticEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import { getLoggedInUser, auth } from '../util';
 import { getLoggedInUserQuery } from '../graphql/member';
@@ -38,12 +39,10 @@ const Home = (props: Props) => {
 						const { id, name } = data.loggedInUser;
 						return (
 							<>
-								<h1>Hi</h1>
+								<h1>Hi {name}</h1>
 								{id ? (
 									<div>
-										<p>
-											Great, you're logged in <b>{name}</b>!
-										</p>
+										<p>Great, you're logged in.</p>
 										<p>
 											<a href="#" onClick={handleLogout}>
 												Log out
@@ -52,7 +51,9 @@ const Home = (props: Props) => {
 									</div>
 								) : (
 									<div>
-										Hmm&hellip we couldn't find your account. Log in or Sign up
+										Hmm&hellip; we couldn't find your account.{' '}
+										<Link to="/login">Log in</Link> or{' '}
+										<Link to="/signup">Sign up</Link>.
 									</div>
 								)}
 							</>
@@ -61,8 +62,11 @@ const Home = (props: Props) => {
 				</Query>
 			) : (
 				<>
-					<h1>You aren't signed in</h1>
-					<div>Log in or Sign up</div>
+					<h1>Welcome</h1>
+					<div>
+						<Link to="/login">Log in</Link> or <Link to="/signup">Sign up</Link>
+						.
+					</div>
 				</>
 			)}
 		</>
