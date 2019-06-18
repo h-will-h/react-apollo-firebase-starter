@@ -1,48 +1,29 @@
 import React, { Component, BaseSyntheticEvent } from "react";
 import { History } from "history";
-import { auth, client } from "../util";
-import { createUserMutation } from "../graphql/member";
-
+import { auth } from "../util";
 interface Props {
   history: History;
 }
-
 interface State {
-  name: string;
   email: string;
   password: string;
   error: Error | null;
 }
-
-class Signup extends Component<Props, State> {
-  state = {
-    name: "",
-    email: "",
-    password: "",
-    error: null
-  };
+class Login extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      email: "",
+      password: "",
+      error: null
+    };
+  }
   handleSubmit = (e: BaseSyntheticEvent) => {
-    const { name, email, password } = this.state;
     e.preventDefault();
     auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(async (data: any) => {
-        const token = await data.user.getIdToken(true);
-        client
-          .mutate({
-            mutation: createUserMutation,
-            variables: {
-              name
-            },
-            context: {
-              headers: {
-                token
-              }
-            }
-          })
-          .then(() => {
-            this.props.history.push(`/`);
-          });
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => {
+        this.props.history.push(`/`);
       })
       .catch((error: any) => {
         this.setState({ error });
@@ -55,19 +36,12 @@ class Signup extends Component<Props, State> {
       [name]: value
     });
   };
-
   render() {
     const { error } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
-        {error && <p>Error: {error}</p>}
         <h1>Sign Up</h1>
-        <fieldset>
-          <p>
-            <label>Name</label>
-          </p>
-          <input type="text" name="name" onChange={this.handleKeyUp} />
-        </fieldset>
+        {error && <p>Error: {error}</p>}
         <fieldset>
           <p>
             <label>Email</label>
@@ -80,7 +54,7 @@ class Signup extends Component<Props, State> {
           </p>
           <input type="password" name="password" onChange={this.handleKeyUp} />
           <p>
-            <input type="submit" value="Sign Up" />
+            <input type="submit" value="Log in" />
           </p>
         </fieldset>
       </form>
@@ -88,4 +62,4 @@ class Signup extends Component<Props, State> {
   }
 }
 
-export default Signup;
+export default Login;
