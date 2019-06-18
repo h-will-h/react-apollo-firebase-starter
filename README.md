@@ -12,7 +12,7 @@ I've stubbed out pretty much everything you'd need to get the basics working, in
 - Basic React app w/ Apollo Client.
 - Basic Auth from the React app to GraphQL.
 
-## What's not here.
+## What's not here
 
 - Tests :(.
 - A tutorial.
